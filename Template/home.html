@@ -1,0 +1,131 @@
+{% include "header.html" %}
+{% load static %}
+{% block content %}
+<head>
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+    <!-- <script>
+        async function fetchHarvestData() {
+            try {
+                const response = await fetch('api/harvest/'); // API endpoint
+                if (!response.ok) throw new Error('Failed to fetch data');
+                
+                const data = await response.json();
+                const itemsContainer = document.getElementById('items-container');
+                
+                // Clear existing items
+                itemsContainer.innerHTML = '';
+    
+                // Populate new data
+                data.all_items.forEach(item => {
+                    const itemElement = document.createElement('div');
+                    itemElement.innerHTML = `
+                        <h3>${item.Name}</h3>
+                        <p>Price: $${item.price}</p>
+                        <p>Stock: ${item.stock ? 'Available' : 'Out of Stock'}</p>
+                        <p>Images: ${item.images.join(', ')}</p>
+                    `;
+                    itemsContainer.appendChild(itemElement);
+                });
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        }
+    
+        // Fetch data on page load
+        document.addEventListener('DOMContentLoaded', fetchHarvestData);
+    </script> -->
+</head>
+
+
+<body id="body-pd">
+    <header class="header" id="header">
+        <div class="header_toggle"> <i class='bx bx-menu bx' style="color: black;" id="header-toggle"></i> </div>
+        <div class="header_img"> <img src="../static/images/harvest-logo-design-template-vector-M627E0.jpg" alt=""> </div>
+    </header>
+    <div class="l-navbar" id="nav-bar">
+        <nav class="nav">
+            <div> <a href="#" class="nav_logo"> <i class='bx bx-layer nav_logo-icon'></i> <span         class="nav_logo-name">Infomatix</span> </a>
+                <div class="nav_list">
+                     <a href="#" class="nav_link active"> <i class='bx bx-grid-alt nav_icon'></i> <span class="nav_name">Product</span></a> 
+                <!-- <a href="#" class="nav_link"> <i class='bx bx-user nav_icon'></i> <span class="nav_name">Users</span> </a>
+                <a href="#" class="nav_link"> <i class='bx bx-message-square-detail nav_icon'></i> <span class="nav_name">Messages</span></a> 
+                <a href="#" class="nav_link"> <i class='bx bx-bookmark nav_icon'></i> <span class="nav_name">Bookmark</span></a> 
+                <a href="#" class="nav_link"> <i class='bx bx-folder nav_icon'></i> <span class="nav_name">Files</span> </a> 
+                <a href="#" class="nav_link"> <i class='bx bx-bar-chart-alt-2 nav_icon'></i> <span class="nav_name">Stats</span> </a> -->
+                </div>
+            </div> <a href="/logout/" class="nav_link" onclick="confirm_logout(event)"> <i class='bx bx-log-out nav_icon'></i> <span class="nav_name">Logout</span> </a>
+        </nav>
+    </div>
+    <!--Container Main start-->
+    <div style=" height: 50px;" id="date_container">
+        <form action="{% url 'home' %}" method="POST" id="filterForm">
+            {% csrf_token %}
+        
+            <!-- Brand filter -->
+            <select name="brand" id="brand_selection" onchange="document.getElementById('filterForm').submit()">
+                <option value="" {% if not selected_brand %}selected{% endif %}>All Brands</option>
+                {% for brand in unique_brands %}
+                <option value="{{ brand }}" {% if brand == selected_brand %}selected{% endif %}>{{ brand }}</option>
+                {% endfor %}
+            </select>
+            <br>
+            <!-- Date filter -->
+            <input type="date" class="form-control h-75" id="date_selection" name="date" value="{{ selected_date }}" onchange="document.getElementById('filterForm').submit()">
+        </form>
+    </div>
+    <div class="main_table">
+        <div class="height-100 w-100 bg-light" id="main_contents" style="overflow-x:auto;">
+
+            <table class="table table-bordered" id="specific">
+                <tr class="table-warning text-center" id="thead">
+                    <th scope="col">Sno</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Brand</th>
+                    <th scope="col">images</th>
+                    <th scope="col">stock</th>
+                    
+                </tr>
+                <tbody id="tbody">
+                    {% for i in filtered_records %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td onclick="Popup_side('{{ i.Name }}', '{{ i.price }}', '{{ i.brand }}', '{{ i.images.0 }}', '{{ i.stock }}', '{{ i.product_url}}')" style="cursor: pointer;">{{i.Name}}</td>
+                            <td>{{i.price}}</td>
+                            <td>{{i.brand}}</td>
+                            <td>
+                                <img src="{{ i.images.0 }}" alt="{{ i.Name }}" style="max-width: 50px; height: 40px;" />
+                                <!-- <img src="{{ i.images.1 }}" alt="{{ i.Name }}" style="max-width: 50px; height: 40px;" alt=""> -->
+                            </td>
+                            <td>{{i.stock}}</td>
+                            
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="6">No records found.</td>
+                        </tr>
+                       
+                    {% endfor %}
+                </tbody>
+            </table> 
+                
+        </div>
+        <div id="popup">
+            <div style="display: flex; margin-top: 10px;">
+                <h6 style="font-weight: bolder; margin-left: 10px;">Details</h6>
+                <p class="bx bx-x" style="font-size: 1.25rem;" onclick="closePopup()" id="close"></p>
+            </div>
+            <img id="popup-image" src="" alt="Product Image" style="max-width: 200px; height: 200px;" />
+            <div id="product_details">
+                <p>Name: <span id="popup-name"></span></p>
+                <p>Price: <span id="popup-price"></span></p>
+                <a id="popup-url" href="#" target="_blank">View product</a>
+            </div>
+            
+            
+        </div>
+    </div>
+    <!--Container Main end-->
+    
+</body>
+{% endblock %}

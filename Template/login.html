@@ -1,0 +1,48 @@
+{% extends "index.html" %}
+{% include "header.html" %}
+{% load static %}
+{% block content %}
+<title>Login</title>
+
+    <!-- {% if messages %}
+    {% for message in messages %}
+        {% if message.tags == 'error' %}
+            <div class="alert alert-danger">
+                {{ message }}
+            </div>  
+        {% else %} 
+            <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+            </div>
+        {% endif %}
+    {% endfor %}
+    {% endif %} -->
+    
+      <div class="login-page">
+        <div class="form">
+              <!-- Heading -->
+            <!-- <p style="color: blue; text-align: center;" id="head_exp">
+                <img src="../static/images/money.webp" alt="" height="40px" width="40px">
+                Expense Management
+            </p> -->
+            <!-- <hr> -->
+
+    
+          
+    
+            <!-- Login Form -->
+            <form action="" method="POST" class="login-form">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <input type="text" name="user" class="form-control" placeholder="Username" required />
+                </div>
+                <div class="mb-3">
+                    <input type="password" name="pass" class="form-control" placeholder="Password" required />
+                </div>
+                <p style="color: rgb(187, 0, 0); font-size: 15px;">{{ error }}</p>
+                <button type="submit" class="btn w-50">Login</button>
+                
+            </form>
+        </div>
+    </div>
+{% endblock %}
