@@ -100,4 +100,4 @@ for i in data:
 
     response = requests.request("POST", url, headers=headers, data=payload)
 
-    print(response.text)
+    print(json.loads(response.text))
