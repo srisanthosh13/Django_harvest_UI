@@ -40,7 +40,7 @@
 <body id="body-pd">
     <header class="header" id="header">
         <div class="header_toggle"> <i class='bx bx-menu bx' style="color: black;" id="header-toggle"></i> </div>
-        <div class="header_img"> <img src="../static/images/harvest-logo-design-template-vector-M627E0.jpg" alt=""> </div>
+        <div class="header_img"> <img src="../static/images/amazon_logo.png" alt="Amazon logo"> </div>
     </header>
     <div class="l-navbar" id="nav-bar">
         <nav class="nav">
@@ -79,7 +79,7 @@
             <table class="table table-bordered" id="specific">
                 <tr class="table-warning text-center" id="thead">
                     <th scope="col">Sno</th>
-                    <th scope="col">Name</th>
+                    <th scope="col" style="width: 700px;">Name</th>
                     <th scope="col">Price</th>
                     <th scope="col">Brand</th>
                     <th scope="col">images</th>
@@ -97,7 +97,16 @@
                                 <img src="{{ i.images.0 }}" alt="{{ i.Name }}" style="max-width: 50px; height: 40px;" />
                                 <!-- <img src="{{ i.images.1 }}" alt="{{ i.Name }}" style="max-width: 50px; height: 40px;" alt=""> -->
                             </td>
-                            <td>{{i.stock}}</td>
+                            {% if i.stock %}
+                            <td style=" color: green;">
+                               In Stock
+                            </td>
+                            {% else %}
+                            <td style="color: red;">
+                                Out Of stock
+                            </td>
+                            {% endif %}
+                            
                             
                         </tr>
                     {% empty %}

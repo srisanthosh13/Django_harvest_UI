@@ -1,0 +1,29 @@
+{% include "header.html" %}
+{% load static %}
+{% block content %}
+<title>Start</title>
+<link rel="icon" href="../static/images/harvest-logo-design-template-vector-M627E0.jpg" type="jpg">
+<div style="position: absolute; top: 50%; left: 45%;  right: 50%; bottom: 50%; transform: translate(-50%, -50%); display: flex; ">
+    {% if not login_button %}
+    <!-- <div> -->
+        <form action="start_harvest" method="POST">
+            {% csrf_token %}
+            <input type="submit" value="Start Harvest" class="btn btn-primary">
+        </form>
+        <form action="login_page" method="POST" style="margin-left: 20px;">
+            {% csrf_token %}
+            <input type="submit" value="Login" class="btn btn-primary">
+        </form>
+    <!-- </div> -->
+    
+    {% endif %}
+
+    {% if login_button %}
+    <form action="login_page" method="POST">
+        {% csrf_token %}
+        <input type="submit" value="Login" class="btn btn-primary">
+    </form>
+    {% endif %}
+    
+</div>
+{% endblock %}

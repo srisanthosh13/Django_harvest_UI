@@ -1,0 +1,25 @@
+base_url:
+  ind: https://www.amazon.in
+
+name:
+  - res.xpath('//div[@id="titleSection"]/h1/span/text()').extract_first().strip()
+  - res.xpath('//span[@id="productTitle"]/text()').extract()[1].strip()
+
+price:
+  - res.xpath('//span[@class="a-price a-text-normal aok-align-center reinventPriceAccordionT2"]//span[@class="a-offscreen"]//text()').extract_first().replace(',','')
+  - res.xpath('//div[@class="a-box-group"]//span[@class="a-price aok-align-center"]//span[@class="a-offscreen"]//text()').extract_first().replace(',','')
+  - res.xpath('//div[@class="a-section a-spacing-none aok-align-center"]//span[@class="a-price aok-align-center reinventPricePriceToPayMargin priceToPay"]/span[@class="a-offscreen"]').extract_first().replace(',','')
+  - res.xpath('//div[@class="a-box-inner a-padding-base"]//div[@class="a-section a-spacing-micro"]//span[@class="a-offscreen"]//text()').extract_first().replace(',','')
+  - res.xpath('//div[@class="a-section a-spacing-none aok-align-center aok-relative"]//span[@class="a-price-whole"]/text()').extract_first().replace(',','')
+
+image_list:
+  - "[data.replace(',50','').replace('SX38','SX500').replace('SY50','SY500') for data in (res.xpath('//div[@class=\"a-fixed-left-grid-col a-col-left\"]//ul//li[@class=\"a-spacing-small item imageThumbnail a-declarative\"]//img/@src').extract())]"
+  # - res.xpath('//ul[@class = "product-gallery__list"]/li/img/@src').extract()
+  # - res.xpath('//li[@class="a-spacing-small item imageThumbnail a-declarative"]//span[@class="a-list-item"]//span[@class="a-button-text"]//img//@src').extract()
+
+availability:
+  - res.xpath('//div[@id="availability"]/span/text()').extract_first()
+  - res.xpath("//span[@class='a-size-medium a-color-success']//text()").extract_first()
+
+brand:
+  - res.xpath("//tr[@class='a-spacing-small po-brand']/td[2]/span/text()").extract_first()

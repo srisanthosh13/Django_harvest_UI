@@ -1,8 +1,10 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from Insert_api_code.models import Harvest
+from .models import Master
 from django.http import JsonResponse
 from datetime import datetime
+from .scraping import StartHarvest
 # Create your views here.
 
 def login_check(request):
@@ -26,6 +28,8 @@ def log_out(request):
     logout(request)
     return redirect('/')
 
+def login_page(request):
+    return render(request, 'login.html')
 
 def home(request):
     # Check if the user is logged in
@@ -42,6 +46,7 @@ def home(request):
         # Get the selected brand and date from the form
         selected_brand = request.POST.get('brand')
         date_str = request.POST.get('date')
+        print(selected_brand, date_str)
 
         # Apply filters if provided
         if selected_brand and date_str:
@@ -58,7 +63,7 @@ def home(request):
         date_str = current_date
 
     # Extract unique brand names for the dropdown
-    unique_brands = Harvest.objects.values_list('brand', flat=True).distinct()
+    unique_brands = Harvest.objects.filter(date__date=datetime.today().date()).values_list('brand', flat=True).distinct()
 
     return render(request, 'home.html', {
         'filtered_records': filtered_records,
@@ -66,3 +71,16 @@ def home(request):
         'unique_brands': unique_brands,
         'selected_brand': selected_brand,
     })
+
+
+def start_harvest(request):
+    return render(request, "start.html")
+
+
+def harvest(request):
+    data = Master.objects.all()
+    url_list = list(data.values_list('url', flat=True))
+    # print(url_list)
+    StartHarvest.get_url(url_list)
+    log_button= True
+    return render(request, 'start.html',{"login_button": log_button})
