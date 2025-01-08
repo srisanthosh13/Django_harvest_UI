@@ -3,6 +3,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 import json
 from .models import Harvest
+from Harvest_application.models import Master
+
 
 @method_decorator(csrf_exempt, name='dispatch')  # Disable CSRF for API requests
 def create_harvest(request):
@@ -50,4 +52,34 @@ def create_harvest(request):
         except json.JSONDecodeError:
             return JsonResponse({'error': 'Invalid JSON format'}, status=400)
 
+    return JsonResponse({'error': 'Invalid HTTP method. Only POST is allowed.'}, status=405)
+
+@method_decorator(csrf_exempt, name='dispatch')
+def insert_master_data(request):
+    if request.method == 'POST':
+        try:
+            # Parse JSON data from request body
+            data = json.loads(request.body)
+            url = data.get('ProductUrl')
+            retailer_name = data.get('RetailerName')
+            # print(url,retailer_name)
+
+             # Validate data
+            if not url:
+                return JsonResponse({'error': 'Url is required and must be a Url format'}, status=400)
+            if not retailer_name and isinstance(retailer_name, str):
+                return JsonResponse({"error":"Retailer name is required and must be a string"}, status = 400)
+            
+            Insert = Master(url = url, retailer = retailer_name)
+            Insert.save()
+
+            return JsonResponse({
+                'message': 'data succesfully Inserted in Master!'
+                # 'data': {'id': harvest.id, 'Name': harvest.Name, 'price': harvest.price,}
+            }, status=200)
+
+
+        except json.JSONDecodeError:
+            return JsonResponse({"error": "Invalid Json format"},status = 400)
+    
     return JsonResponse({'error': 'Invalid HTTP method. Only POST is allowed.'}, status=405)

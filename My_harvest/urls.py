@@ -20,7 +20,10 @@ from django.urls import path
 from Harvest_application import views
 
 urlpatterns = [
-    path('', views.login_check, name = 'login'),
+    path('',views.start_harvest, name = 'start'),
+    path('start_harvest', views.harvest, name = 'harvest'),
+    path('login_page', views.login_page),
+    path('login', views.login_check, name = 'login'),
     path('home',views.home, name ='home'),
     path('logout/',views.log_out),
     # insert api path

@@ -3,13 +3,11 @@
   padding: 0;
  }
 .login-page {
-  /* display: flex;
-  justify-content: center;
-  align-items: center; */
+
   height: 100vh;
   background-image: url(../images/background_images.jpg);
   background-size: cover;
-  /* background-color: #1d76ce; */
+
 }
 
 
@@ -18,12 +16,12 @@
 .form {
     /* border: 2px solid black; */
   position: relative;
-  left: 5%;
+  /* left: 5%; */
   top: 15%;
-  /* background-color: rgba(17, 0, 255, 0.1); */
   padding: 20px;
-  border-radius: 8px;
-  width: 100%;
+  
+  /* border-radius: 8px; */
+  /* width: 100%; */
   max-width: 400px;
 }
 .form button {
