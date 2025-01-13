@@ -40,20 +40,33 @@ def home(request):
     # Initialize variables
     date_str = None
     selected_brand = None
+    stock = None
+    current_date = None
     filtered_records = Harvest.objects.all()  # Default: show all records
 
     if request.method == 'POST':
         # Get the selected brand and date from the form
         selected_brand = request.POST.get('brand')
         date_str = request.POST.get('date')
-        print(selected_brand, date_str)
+        stock = request.POST.get('stock')
+        print('sdfsdfsfd',selected_brand, date_str, stock)
 
         # Apply filters if provided
-        if selected_brand and date_str:
+        if stock and selected_brand:
+            print('5')
+            filtered_records = Harvest.objects.filter(stock=stock, brand=selected_brand)
+            print('filtered_records', filtered_records)
+        elif stock and date_str:
+            print('4')
+            filtered_records = Harvest.objects.filter(stock=stock, date__date=date_str)
+        elif selected_brand and date_str:
+            print('1')
             filtered_records = Harvest.objects.filter(brand=selected_brand, date__date=date_str)
         elif selected_brand:
+            print('2')
             filtered_records = Harvest.objects.filter(brand=selected_brand)
         elif date_str:
+            print('3')
             filtered_records = Harvest.objects.filter(date__date=date_str)
 
     else:
@@ -63,13 +76,15 @@ def home(request):
         date_str = current_date
 
     # Extract unique brand names for the dropdown
-    unique_brands = Harvest.objects.filter(date__date=datetime.today().date()).values_list('brand', flat=True).distinct()
+    unique_brands = Harvest.objects.filter(date__date=date_str).values_list('brand', flat=True).distinct()
 
     return render(request, 'home.html', {
         'filtered_records': filtered_records,
         'selected_date': date_str,
         'unique_brands': unique_brands,
         'selected_brand': selected_brand,
+        'selected_stock': stock,
+        'current_date':current_date,
     })
 
 

@@ -69,6 +69,12 @@
                 {% endfor %}
             </select>
             <br>
+            <select name="stock" id="brand_selection" onchange="document.getElementById('filterForm').submit()"  {% if current_date and not filtered_records %}disabled{% endif %}>
+                <option value=""  {% if not selected_stock %}selected{% endif %}>All Stock</option>
+                <option value="1" {% if selected_stock == "1" %}selected{% endif %}>In Stock</option>
+                <option value="0" {% if selected_stock == "0" %}selected{% endif %}>Out of Stock</option>
+            </select>
+            <br>
             <!-- Date filter -->
             <input type="date" class="form-control h-75" id="date_selection" name="date" value="{{ selected_date }}" onchange="document.getElementById('filterForm').submit()">
         </form>
